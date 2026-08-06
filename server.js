@@ -31,11 +31,34 @@ app.get("/webhook", (req, res) => {
 });
 
 // Recepción de mensajes
+// Recepción de mensajes
 app.post("/webhook", (req, res) => {
-    console.log("Mensaje recibido:");
+
+    console.log("=========== NUEVO MENSAJE ===========");
     console.log(JSON.stringify(req.body, null, 2));
 
+    try {
+
+        const mensaje =
+            req.body.entry?.[0]
+                ?.changes?.[0]
+                ?.value?.messages?.[0];
+
+        if (mensaje) {
+
+            console.log("Número:", mensaje.from);
+            console.log("Texto:", mensaje.text?.body);
+
+        }
+
+    } catch (err) {
+
+        console.error("Error:", err);
+
+    }
+
     res.sendStatus(200);
+
 });
 
 // Ruta principal
