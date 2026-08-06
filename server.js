@@ -1,3 +1,11 @@
+const express = require("express");
+require("dotenv").config();
+
+const app = express();
+
+app.use(express.json());
+
+// Verificación del webhook
 app.get("/webhook", (req, res) => {
 
     console.log("===== VERIFICACIÓN WEBHOOK =====");
@@ -19,6 +27,25 @@ app.get("/webhook", (req, res) => {
     }
 
     console.log("❌ TOKEN INCORRECTO");
-
     return res.status(403).send("Forbidden");
+});
+
+// Recepción de mensajes
+app.post("/webhook", (req, res) => {
+    console.log("Mensaje recibido:");
+    console.log(JSON.stringify(req.body, null, 2));
+
+    res.sendStatus(200);
+});
+
+// Ruta principal
+app.get("/", (req, res) => {
+    res.send("Webhook de WhatsApp funcionando");
+});
+
+// Iniciar servidor
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+    console.log(`Servidor ejecutándose en el puerto ${PORT}`);
 });
